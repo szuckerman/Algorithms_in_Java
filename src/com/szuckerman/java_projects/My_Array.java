@@ -3,11 +3,16 @@ import java.util.Arrays;
 
 public class My_Array {
 
-    private int[] my_array = {1, 3, 45, 2, 63, 10, 10, 22, 5, 222, 10, 20, 31, 100, 7, 4};
+    private int[] default_array = {1, 3, 45, 2, 63, 10, 10, 22, 5, 222, 10, 20, 31, 100, 7, 4};
+    public int[] my_array;
+    
+    public My_Array(int[] my_array){
+        this.my_array = my_array;
+    }
 
-//    public My_Array(){
-//        this.my_array = my_array;
-//    }
+    public My_Array(){
+        this.my_array = default_array;
+    }
 
     public String print_array(){
         return Arrays.toString(my_array);
