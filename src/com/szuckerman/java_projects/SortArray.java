@@ -3,16 +3,14 @@ import java.util.Arrays;
 
 public class SortArray {
 
-    private int[] default_array = {2,1,3};
-//    private int[] default_array = {1, 3, 45, 2, 63, 10, 10, 22, 5, 222, 10, 20, 31, 100, 7, 4};
     private int[] my_array;
-    
-    public SortArray(int[] my_array){
+
+    SortArray(int[] my_array){
         this.my_array = my_array;
     }
 
-    public SortArray(){
-        this.my_array = default_array;
+    SortArray(){
+        this.my_array = new int[]{2,1,3};
     }
 
     public String print_array(){
