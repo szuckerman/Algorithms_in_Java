@@ -20,38 +20,39 @@ public class My_Array {
     }
 
     public String insertion_sort() {
-        //i is location to refer to
-        //k is the referrer
+        //k is the index of the value we're looking at right now
+        //i is the index of the last value of the previous subarray to which we're comparing the value of my_array[k]
+
         int i = 0;
         int k = i + 1;
-        int temp;
+
         while (k < my_array.length) {
-            System.out.format("i: %d, k = %d\n", i, k);
             if (my_array[k] >= my_array[i]) {
+                //if my_array[k] is bigger than the previous element (i.e. the biggest element in the previous subarray)
+                //just move the i and k cursors to the right.
+
                 k += 1;
                 i += 1;
-                System.out.println(Arrays.toString(my_array));
-                System.out.format("i: key = %d, val = %d\n", i, my_array[i]);
-                System.out.format("k: key = %d, val = %d\n", k, my_array[k]);
+
             } else if (my_array[k] < my_array[i]) {
 
                 int val_to_move = my_array[k];
 
-                System.out.format("We will be moving %d", val_to_move);
-                System.out.println("");
-                System.out.println("");
-
+                // we want to keep track of k, but also have a new k 'move' to sort the subarray
                 int new_k = k;
 
                 while (i>=0 && val_to_move < my_array[i]){
+                    //at i=0, we've looked at the whole subarray. We should quit at that point.
                     my_array[new_k] = my_array[i];
-                    System.out.format("new_i: key = %d, val = %d\n", i, my_array[i]);
-                    System.out.format("new_k: key = %d, val = %d\n", new_k, my_array[new_k]);
                     my_array[i] = val_to_move;
+                    //move everything one to the right and the 'bigger value' to the current location
+                    //move two cursors to the left and repeat
                     i -= 1;
                     new_k -= 1;
                 }
 
+                // once the subarray is sorted, move the main cursor one to the right and set the last element in the
+                // subarray to one element prior
                 k += 1;
                 i = k - 1;
 
