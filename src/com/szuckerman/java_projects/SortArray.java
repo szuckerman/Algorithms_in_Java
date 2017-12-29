@@ -3,21 +3,7 @@ import java.util.Arrays;
 
 public class SortArray {
 
-    private int[] my_array;
-
-    SortArray(int[] my_array){
-        this.my_array = my_array;
-    }
-
-    SortArray(){
-        this.my_array = new int[]{2,1,3};
-    }
-
-    public String print_array(){
-        return Arrays.toString(my_array);
-    }
-
-    public String insertion_sort() {
+    public static String insertion_sort(int[] my_array) {
         //k is the index of the value we're looking at right now
         //i is the index of the last value of the previous subarray to which we're comparing the value of my_array[k]
 
@@ -58,4 +44,5 @@ public class SortArray {
         }
     return Arrays.toString(my_array);
     }
+
 }
