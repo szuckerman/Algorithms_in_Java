@@ -1,5 +1,5 @@
 package com.szuckerman.java_projects;
-import java.util.Arrays;
+import java.util.*;
 
 public class SortArray {
 
@@ -44,5 +44,37 @@ public class SortArray {
         }
     return Arrays.toString(my_array);
     }
+
+    public static ArrayNode make_array_tree(int[] my_array) {
+        ArrayNode head_array_node = new ArrayNode(my_array);
+        Stack<ArrayNode> array_stack = new Stack<>();
+
+        ArrayNode my_array_left = new ArrayNode(Arrays.copyOfRange(head_array_node.getNodeValue(), 0, head_array_node.getNodeMidpoint()));
+        ArrayNode my_array_right = new ArrayNode(Arrays.copyOfRange(head_array_node.getNodeValue(), head_array_node.getNodeMidpoint(), head_array_node.getNodeLength()));
+
+        head_array_node.setNodes(my_array_left, my_array_right);
+
+        array_stack.push(my_array_left);
+        array_stack.push(my_array_right);
+
+        ArrayNode new_array_node;
+
+        while (!array_stack.isEmpty()) {
+            new_array_node = array_stack.pop();
+
+            if (new_array_node.getNodeLength() > 1) {
+                my_array_left = new ArrayNode(Arrays.copyOfRange(new_array_node.getNodeValue(), 0, new_array_node.getNodeMidpoint()));
+                my_array_right = new ArrayNode(Arrays.copyOfRange(new_array_node.getNodeValue(), new_array_node.getNodeMidpoint(), new_array_node.getNodeLength()));
+
+                new_array_node.setNodes(my_array_left, my_array_right);
+                array_stack.push(my_array_left);
+                array_stack.push(my_array_right);
+            }
+        }
+
+        return head_array_node;
+
+    }
+
 
 }
