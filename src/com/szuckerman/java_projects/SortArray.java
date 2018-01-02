@@ -49,8 +49,10 @@ public class SortArray {
         ArrayNode head_array_node = new ArrayNode(my_array);
         Stack<ArrayNode> array_stack = new Stack<>();
 
-        ArrayNode my_array_left = new ArrayNode(Arrays.copyOfRange(head_array_node.getNodeValue(), 0, head_array_node.getNodeMidpoint()));
-        ArrayNode my_array_right = new ArrayNode(Arrays.copyOfRange(head_array_node.getNodeValue(), head_array_node.getNodeMidpoint(), head_array_node.getNodeLength()));
+        ArrayNode my_array_left = new ArrayNode(Arrays.copyOfRange(head_array_node.getNodeValue(),
+                                            0, head_array_node.getNodeMidpoint()));
+        ArrayNode my_array_right = new ArrayNode(Arrays.copyOfRange(head_array_node.getNodeValue(),
+                                                head_array_node.getNodeMidpoint(), head_array_node.getNodeLength()));
 
         head_array_node.setNodes(my_array_left, my_array_right);
 
@@ -63,8 +65,10 @@ public class SortArray {
             new_array_node = array_stack.pop();
 
             if (new_array_node.getNodeLength() > 1) {
-                my_array_left = new ArrayNode(Arrays.copyOfRange(new_array_node.getNodeValue(), 0, new_array_node.getNodeMidpoint()));
-                my_array_right = new ArrayNode(Arrays.copyOfRange(new_array_node.getNodeValue(), new_array_node.getNodeMidpoint(), new_array_node.getNodeLength()));
+                my_array_left = new ArrayNode(Arrays.copyOfRange(new_array_node.getNodeValue(),
+                                            0, new_array_node.getNodeMidpoint()));
+                my_array_right = new ArrayNode(Arrays.copyOfRange(new_array_node.getNodeValue(),
+                                                new_array_node.getNodeMidpoint(), new_array_node.getNodeLength()));
 
                 new_array_node.setNodes(my_array_left, my_array_right);
                 array_stack.push(my_array_left);
@@ -74,6 +78,27 @@ public class SortArray {
 
         return head_array_node;
 
+    }
+
+
+    private static int[] merge_arrays(int[] left_array, int[] right_array){
+
+        int num_elements = left_array.length + right_array.length;
+        int[] new_array = new int[num_elements];
+
+        //left_array.length <= right_array.length. Equal if main array is even, right_array
+        //is larger if main array is odd.
+
+        for (int i=0; i<left_array.length; i++){
+            new_array[2*i] = Math.max(left_array[i], right_array[i]);
+            new_array[2*i + 1] = Math.min(left_array[i], right_array[i]);
+        }
+
+        if (right_array.length > left_array.length){
+            new_array[num_elements-1] = right_array[right_array.length-1];
+        }
+
+        return new_array;
     }
 
 
