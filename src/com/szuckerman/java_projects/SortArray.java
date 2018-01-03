@@ -45,7 +45,7 @@ public class SortArray {
     return Arrays.toString(my_array);
     }
 
-    public static ArrayNode make_array_tree(int[] my_array) {
+    private static ArrayNode make_array_tree(int[] my_array) {
         ArrayNode head_array_node = new ArrayNode(my_array);
         Stack<ArrayNode> array_stack = new Stack<>();
 
@@ -54,7 +54,10 @@ public class SortArray {
         ArrayNode my_array_right = new ArrayNode(Arrays.copyOfRange(head_array_node.getNodeValue(),
                                                 head_array_node.getNodeMidpoint(), head_array_node.getNodeLength()));
 
-        head_array_node.setNodes(my_array_left, my_array_right);
+        head_array_node.setChildNodes(my_array_left, my_array_right);
+
+        my_array_left.setParentNode(head_array_node);
+        my_array_right.setParentNode(head_array_node);
 
         array_stack.push(my_array_left);
         array_stack.push(my_array_right);
@@ -70,7 +73,11 @@ public class SortArray {
                 my_array_right = new ArrayNode(Arrays.copyOfRange(new_array_node.getNodeValue(),
                                                 new_array_node.getNodeMidpoint(), new_array_node.getNodeLength()));
 
-                new_array_node.setNodes(my_array_left, my_array_right);
+                new_array_node.setChildNodes(my_array_left, my_array_right);
+
+                my_array_left.setParentNode(new_array_node);
+                my_array_right.setParentNode(new_array_node);
+
                 array_stack.push(my_array_left);
                 array_stack.push(my_array_right);
             }
@@ -81,25 +88,106 @@ public class SortArray {
     }
 
 
-    private static int[] merge_arrays(int[] left_array, int[] right_array){
+    public static int[] merge_arrays(int[] left_array, int[] right_array){
 
-        int num_elements = left_array.length + right_array.length;
+        int n_L = left_array.length;
+        int n_R = right_array.length;
+
+        int num_elements = n_L + n_R;
         int[] new_array = new int[num_elements];
+
+        System.out.format("There are %d elements in the first array\n", n_L);
+        System.out.format("There are %d elements in the second array\n", n_R);
 
         //left_array.length <= right_array.length. Equal if main array is even, right_array
         //is larger if main array is odd.
 
-        for (int i=0; i<left_array.length; i++){
-            new_array[2*i] = Math.max(left_array[i], right_array[i]);
-            new_array[2*i + 1] = Math.min(left_array[i], right_array[i]);
+        if (n_L == 1 && n_R == 1){
+            new_array[0] = Math.min(left_array[0], right_array[0]);
+            new_array[1] = Math.max(left_array[0], right_array[0]);
+            return new_array;
         }
 
-        if (right_array.length > left_array.length){
-            new_array[num_elements-1] = right_array[right_array.length-1];
+        int l_i = 0;
+        int r_i = 0;
+        int k = 0;
+
+        while (l_i < n_L && r_i < n_R) {
+
+            if (left_array[ l_i ] <= right_array[ r_i ]) {
+                new_array[ k ] = left_array[ l_i ];
+                l_i++;
+
+            }
+
+            else if (right_array[ r_i ] < left_array[ l_i ]){
+                new_array[ k ] = right_array[ r_i ];
+                r_i++;
+            }
+
+            k++;
+        }
+
+        // if we finish an array too early, just fill new_array with the rest of the other one
+
+        if (l_i < n_L) {
+            for (int i = l_i; i < n_L; i++) {
+                new_array[ k ] = left_array[ i ];
+                k++;
+            }
+        }
+
+        if (r_i < n_R) {
+            for (int i = r_i; i < n_R; i++) {
+                new_array[ k ] = right_array[ i ];
+                k++;
+            }
         }
 
         return new_array;
     }
 
+    public static int[] merge_sort(int[] node){
 
+        ArrayNode my_node = make_array_tree(node);
+
+        Stack<ArrayNode> array_stack = new Stack<>();
+
+        array_stack.push(my_node);
+        System.out.format("%s added to stack\n", Arrays.toString(node));
+
+        while (!array_stack.isEmpty()) {
+            ArrayNode current_node = array_stack.pop();
+            System.out.format("Current array is: %s\n", Arrays.toString(current_node.getNodeValue()));
+
+            if (current_node.isTailNode()){
+                continue;
+            }
+
+            else if (current_node.getLeftNode().isTailNode() && current_node.getRightNode().isTailNode()){
+
+                current_node.getLeftNode().setParentNode(current_node);
+                current_node.getRightNode().setParentNode(current_node);
+
+                int[] merged_node = merge_arrays(current_node.getLeftNode().getNodeValue(), current_node.getRightNode().getNodeValue());
+
+                System.out.format("Array merged as %s\n", Arrays.toString(merged_node));
+                current_node.setNode(merged_node);
+                System.out.format("Current node has now been changed to: %s\n\n", Arrays.toString(current_node.getNodeValue()));
+
+                if (current_node.getParentNode() != null) {
+                    array_stack.push(current_node.getParentNode());
+                }
+            }
+
+            else {
+                array_stack.push(current_node.getLeftNode());
+                System.out.format("%s added to stack\n", Arrays.toString(current_node.getLeftNode().getNodeValue()));
+                array_stack.push(current_node.getRightNode());
+                System.out.format("%s added to stack\n", Arrays.toString(current_node.getRightNode().getNodeValue()));
+            }
+        }
+
+        return my_node.getNodeValue();
+    }
 }
